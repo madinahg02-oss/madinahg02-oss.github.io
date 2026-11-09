@@ -1,0 +1,68 @@
+media:
+  - name: product-images
+    label: Product Images
+    input: media/products
+    output: /media/products
+    categories: [image]
+    extensions: [jpg, jpeg, png, webp]
+    rename: safe
+  - name: product-videos
+    label: Product Videos
+    input: media/videos
+    output: /media/videos
+    categories: [video]
+    extensions: [mp4, webm, mov]
+    rename: safe
+
+content:
+  - name: products
+    label: Product Catalog
+    type: file
+    path: data/products.json
+    format: json
+    list: true
+    fields:
+      - name: name
+        label: Product Name
+        type: string
+        required: true
+      - name: code
+        label: Product Code
+        type: string
+      - name: category
+        label: Category (Men / Women)
+        type: string
+        required: true
+      - name: description
+        label: Description
+        type: text
+      - name: retail_price
+        label: Retail Price (IDR)
+        type: number
+      - name: sizes
+        label: Available Sizes
+        type: string
+      - name: colors
+        label: Available Colors
+        type: string
+      - name: stock_status
+        label: Stock Status
+        type: string
+      - name: product_image
+        label: Main Product Photo
+        type: image
+        required: true
+      - name: extra_images
+        label: Additional Photos
+        type: image
+        list: true
+      - name: video_url
+        label: Product Video URL
+        type: string
+      - name: published
+        label: Publish on Website
+        type: boolean
+
+settings:
+  content:
+    merge: true
