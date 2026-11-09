@@ -496,6 +496,56 @@
 
       window.open("https://wa.me/6281382629991?text=" + message, "_blank");
     });
+
+    // Load published products managed from the online admin dashboard.
+    fetch("./data/products.json")
+      .then(function(response) {
+        if (!response.ok) throw new Error("Product catalog unavailable");
+        return response.json();
+      })
+      .then(function(items) {
+        if (!Array.isArray(items)) return;
+        const published = items.filter(function(item) {
+          return item && item.published === true && item.name && item.product_image;
+        });
+        if (!published.length) return;
+
+        const container = document.querySelector("#collection .products");
+        if (!container) return;
+
+        function safe(value) {
+          return String(value == null ? "" : value).replace(/[&<>"']/g, function(char) {
+            return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char];
+          });
+        }
+
+        container.innerHTML = published.map(function(item) {
+          const price = Number(item.retail_price);
+          const priceText = Number.isFinite(price) && price > 0
+            ? "Rp " + new Intl.NumberFormat("id-ID").format(price)
+            : "Harga: hubungi kami";
+          const detail = [item.code, item.stock_status, item.sizes, item.colors]
+            .filter(Boolean).join(" • ");
+          const video = item.product_video
+            ? '<p><a href="' + safe(item.product_video) + '" target="_blank" rel="noopener">WATCH PRODUCT VIDEO →</a></p>'
+            : "";
+          const message = encodeURIComponent("Halo CV RL FASHION GARMENT, saya tertarik dengan " + item.name + (item.code ? " (" + item.code + ")" : "") + ". Mohon info ketersediaannya.");
+          return '<article class="product">' +
+            '<img src="' + safe(item.product_image) + '" alt="' + safe(item.name) + '" loading="lazy">' +
+            '<div class="product-info">' +
+            '<h3>' + safe(item.name) + '</h3>' +
+            '<p>' + safe(item.description || "") + '</p>' +
+            (detail ? '<p>' + safe(detail) + '</p>' : '') +
+            '<div class="price">' + safe(priceText) + '</div>' +
+            video +
+            '<p><a href="https://wa.me/6281382629991?text=' + message + '">ORDER VIA WHATSAPP →</a></p>' +
+            '</div></article>';
+        }).join("");
+      })
+      .catch(function(error) {
+        console.warn("Could not load product catalog:", error);
+      });
+
   </script>
 
 </body>
