@@ -30,9 +30,10 @@ content:
         label: Product Code
         type: string
       - name: category
-        label: Category (Men / Women)
-        type: string
-        required: true
+        label: Category
+        type: select
+        options:
+          values: [Men, Women]
       - name: description
         label: Description
         type: text
@@ -47,7 +48,9 @@ content:
         type: string
       - name: stock_status
         label: Stock Status
-        type: string
+        type: select
+        options:
+          values: [Ready Stock, Made to Order, Sold Out]
       - name: product_image
         label: Main Product Photo
         type: image
@@ -56,9 +59,13 @@ content:
         label: Additional Photos
         type: image
         list: true
-      - name: video_url
-        label: Product Video URL
-        type: string
+      - name: product_video
+        label: Product Video
+        type: file
+        options:
+          media: product-videos
+          categories: [video]
+          extensions: [mp4, webm, mov]
       - name: published
         label: Publish on Website
         type: boolean
